@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/strugee/node-git-clone-or-pull/issues"
   },
-  "homepage": "https://github.com/strugee/node-git-clone-or-pull#readme"
+  "homepage": "https://github.com/strugee/node-git-clone-or-pull#readme",
+  "dependencies": {
+    "nodegit": "^0.14.1"
+  }
 }

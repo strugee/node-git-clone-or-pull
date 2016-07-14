@@ -15,3 +15,34 @@
 
 'use strict';
 
+var fs = require('fs');
+var NodeGit = require('nodegit');
+
+module.exports = function(url, path, callback) {
+	fs.access(path, function(err) {
+		if (err) {
+			// Not yet cloned
+			NodeGit.Clone(url, path);
+		} else {
+			// Cloned already; we need to pull
+			var repo;
+			NodeGit.Repository.open(path).then(function(repository) {
+				repo = repository;
+				return repo.getRemote('origin');
+			}).then(function(remote) {
+				// Sync :/
+				if (remote.url() === url) {
+					return repo;
+				} else {
+					throw new Error('On-disk repository\'s origin remote does not have the specified URL set');
+				}
+			}).then(function() {
+				return repo.fetchAll();
+			}).then(function() {
+				return repo.mergeBranches('master', 'origin/master');
+			}).then(function() {
+				callback();
+			}).catch(callback);
+		}
+	});
+};
