@@ -1,0 +1,24 @@
+{
+  "name": "git-clone-or-pull",
+  "version": "1.0.0",
+  "description": "Ensure a git repo exists on disk and that it's up-to-date",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strugee/node-git-clone-or-pull.git"
+  },
+  "keywords": [
+    "git",
+    "clone",
+    "pull"
+  ],
+  "author": "Alex Jordan <alex@strugee.net>",
+  "license": "LGPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/strugee/node-git-clone-or-pull/issues"
+  },
+  "homepage": "https://github.com/strugee/node-git-clone-or-pull#readme"
+}
