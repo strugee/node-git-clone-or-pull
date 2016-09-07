@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/strugee/node-git-clone-or-pull#readme",
   "dependencies": {
+    "concat-stream": "^1.5.2",
     "nodegit": "^0.14.1"
   }
 }
