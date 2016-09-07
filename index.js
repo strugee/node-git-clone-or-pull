@@ -141,7 +141,7 @@ function spawnWithSanityChecks(name, args, targetCwd, userCallback, exitCallback
 function withGitSubprocess(url, opts, callback) {
 	fs.access(opts.path, function(err) {
 		// Chop off the last path element to get the proper cwd for git subprocesses
-		var targetDir = opts.path.split(path.sep).slice(0, -1);
+		var targetDir = opts.path.split(path.sep).slice(0, -1).join(path.sep);
 
 		if (err) {
 			// Not yet cloned
@@ -149,12 +149,12 @@ function withGitSubprocess(url, opts, callback) {
 				callback();
 			});
 		} else {
-			// TODO: change cwd
 			// Cloned already; we need to pull
 
 			// Check remote url
 			spawnWithSanityChecks('git', ['remote', 'get-url', 'origin'], opts.path, callback, function(remoteUrl) {
-				console.log(remoteUrl);
+				// Take out the trailing newline
+				remoteUrl = remoteUrl.slice(0, -1);
 
 				if (remoteUrl !== url) {
 					throw new Error('On-disk repository\'s origin remote does not have the specified URL set');
