@@ -16,7 +16,16 @@
 'use strict';
 
 var fs = require('fs');
-var NodeGit = require('nodegit');
+var spawn = require('child_process').spawn;
+var concatStream = require('concat-stream');
+var NodeGit;
+
+try {
+	NodeGit = require('nodegit');
+} catch (e) {
+	// NodeGit not supported on this platform
+	NodeGit = null;
+}
 
 function withNodeGit(url, opts, callback) {
 	fs.access(opts.path, function(err) {
@@ -47,16 +56,94 @@ function withNodeGit(url, opts, callback) {
 	});
 };
 
+function spawnWithSanityChecks(name, args, callback, exitCallback) {
+	var process = spawn(name, args);
+
+	var callbackFired = false;
+
+	// Handle spawn errors
+	process.on('error', function(err) {
+		if (callbackFired) return;
+		callbackFired = true;
+		callback(err);
+	});
+
+	// Capture stderr in case we need it for an Error object
+	var stderr;
+	process.stderr.pipe(concatStream(function(buf) {
+		stderr = buf.toString();
+	}));
+
+	// Capture stdout
+	var stdout;
+	process.stdout.pipe(concatStream(function(buf) {
+		stdout = buf.toString();
+	}));
+
+	process.on('exit', function(code, signal) {
+		// Handle non-zero exits
+		if (code !== 0) {
+			if (callbackFired) return;
+			callbackFired = true;
+			callback(new Error('Process `' + name + ' ' + args.join(' ') + '` exited with non-zero exit code; stderr is:\n' + stderr));
+			return;
+		}
+
+		exitCallback(stdout);
+	});
+
+	return process;
+}
+
+function withGitSubprocess(url, opts, callback) {
+	fs.access(opts.path, function(err) {
+		if (err) {
+			// Not yet cloned
+			spawnWithSanityChecks('git', ['clone', '--quiet', url, opts.path], callback, function(stdout) {
+				callback();
+			});
+		} else {
+			// TODO: change cwd
+			// Cloned already; we need to pull
+
+			// Check remote url
+			spawnWithSanityChecks('git', ['remote', 'get-url', 'origin'], callback, function(remoteUrl) {
+				if (remoteUrl !== url) {
+					throw new Error('On-disk repository\'s origin remote does not have the specified URL set');
+				}
+
+				// Fetch
+				spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], callback, function(stdout) {
+					// Checkout
+					spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], callback, function(stdout) {
+						// Merge
+						spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], callback, function(stdout) {
+							callback();
+						});
+					});
+				});
+			});
+		}
+	});
+}
+
 function gitCloneOrPull(url, opts, callback) {
 	if (typeof opts === 'string') opts = { path: opts };
 
 	if (!opts.implementation) {
-		opts.implementation = 'nodegit';
+		if (NodeGit) {
+			opts.implementation = 'nodegit';
+		} else {
+			opts.implementation = 'subprocess';
+		}
 	}
 
 	switch (opts.implementation) {
 	case 'nodegit':
 		withNodeGit(url, opts, callback);
+		break;
+	case 'subprocess':
+		withGitSubprocess(url, opts, callback);
 		break;
 	default:
 		callback(new Error('Implementation "' + opts.implementation + '" not recognized'));
