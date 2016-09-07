@@ -13,6 +13,10 @@
 * NodeGit is now an optional dependency
 * Advanced options can be specified by passing an object instead of a pathname
 
+### Fixed
+
+* The passed `callback` is now called by the NodeGit implementation if the repo hasn't been cloned yet
+
 ## 1.0.0 - 2016-07-14
 
 ### Added
