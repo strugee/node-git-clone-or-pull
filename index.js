@@ -153,18 +153,19 @@ function withGitSubprocess(url, opts, callback) {
 			// Cloned already; we need to pull
 
 			// Check remote url
-			spawnWithSanityChecks('git', ['remote', 'get-url', 'origin'], targetDir, callback, function(remoteUrl) {
+			spawnWithSanityChecks('git', ['remote', 'get-url', 'origin'], opts.path, callback, function(remoteUrl) {
 				console.log(remoteUrl);
+
 				if (remoteUrl !== url) {
 					throw new Error('On-disk repository\'s origin remote does not have the specified URL set');
 				}
 
 				// Fetch
-				spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], targetDir, callback, function(stdout) {
+				spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], opts.path, callback, function(stdout) {
 					// Checkout
-					spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], targetDir, callback, function(stdout) {
+					spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], opts.path, callback, function(stdout) {
 						// Merge
-						spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], targetDir, callback, function(stdout) {
+						spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], opts.path, callback, function(stdout) {
 							callback();
 						});
 					});
