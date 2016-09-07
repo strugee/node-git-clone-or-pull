@@ -65,37 +65,73 @@ function withNodeGit(url, opts, callback) {
 function spawnWithSanityChecks(name, args, callback, exitCallback) {
 	var process = spawn(name, args);
 
+	// Done here so it gets the right scope
+	function maybeFireCallback() {
+		// This function is called in any place where we might have completed a task that allows us to fire
+
+		if (callbackFired || callbackFiredErr) return;
+
+		// If everything is ready, we *should* fire the callback, and it hasn't already been fired, then do so
+		if (stdoutReady && stderrReady && wantCallback && !callbackFired) {
+			callbackFired = true;
+			exitCallback(stdout);
+		}
+
+		// Ditto for the callback with an error argument
+		if (stdoutReady && stderrReady && wantCallbackError && !callbackFiredErr) {
+			callbackFiredErr = true;
+			userCallback(callbackErr);
+		}
+	}
+
+	// We need all this to synchronize callbacks with when stuff is done buffering, execing, etc.
 	var callbackFired = false;
+	var callbackFiredErr = false;
+	var wantCallback = false;
+	var wantCallbackError = false;
+	var callbackErr;
+	var stdoutReady = false;
+	var stderrReady = false;
 
 	// Handle spawn errors
 	process.on('error', function(err) {
-		if (callbackFired) return;
-		callbackFired = true;
-		callback(err);
+		callbackErr = err;
+		wantCallbackError = true;
+
+		maybeFireCallback();
 	});
 
 	// Capture stderr in case we need it for an Error object
 	var stderr;
 	process.stderr.pipe(concatStream(function(buf) {
 		stderr = buf.toString();
+		stderrReady = true;
+
+		maybeFireCallback();
 	}));
 
 	// Capture stdout
 	var stdout;
 	process.stdout.pipe(concatStream(function(buf) {
 		stdout = buf.toString();
+		stdoutReady = true;
+
+		maybeFireCallback();
 	}));
 
 	process.on('exit', function(code, signal) {
 		// Handle non-zero exits
 		if (code !== 0) {
-			if (callbackFired) return;
-			callbackFired = true;
-			callback(new Error('Process `' + name + ' ' + args.join(' ') + '` exited with non-zero exit code; stderr is:\n' + stderr));
+			callbackErr = new Error('Process `' + name + ' ' + args.join(' ') + '` exited with non-zero exit code; stderr is:\n' + stderr);
+			wantCallbackError = true;
+
+			maybeFireCallback();
+
 			return;
 		}
 
-		exitCallback(stdout);
+		wantCallback = true;
+		maybeFireCallback();
 	});
 
 	return process;
