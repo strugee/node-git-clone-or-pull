@@ -17,8 +17,11 @@
 
 var fs = require('fs');
 var path = require('path');
-var spawn = require('child_process').spawn;
+var childProcess = require('child_process');
 var concatStream = require('concat-stream');
+
+// This sync call is easier, and it's OK because it only happens once, at module init
+var gitBinary = childProcess.spawnSync('git', ['--version']).status === 0;
 var NodeGit;
 
 try {
@@ -83,7 +86,7 @@ function spawnWithSanityChecks(name, args, targetCwd, userCallback, exitCallback
 		}
 	}
 
-	var process = spawn(name, args, { cwd: targetCwd });
+	var process = childProcess.spawn(name, args, { cwd: targetCwd });
 
 	// We need all this to synchronize callbacks with when stuff is done buffering, execing, etc.
 	var callbackFired = false;
@@ -178,11 +181,18 @@ function withGitSubprocess(url, opts, callback) {
 function gitCloneOrPull(url, opts, callback) {
 	if (typeof opts === 'string') opts = { path: opts };
 
-	if (!opts.implementation) {
+	// If a specific implementation has been requested, abort if it's unavailable
+	// Otherwise, choose a sensible default.
+	if (opts.implementation) {
+		if (opts.implementation === 'nodegit' && !NodeGit) return callback(new Error('NodeGit could not be loaded, so implementation "nodegit" is unavailable'));
+		if (opts.implementation === 'subprocess' && !gitBinary) return callback(new Error('Running `git --version` failed, so implementation "subprocess" is unavailable'));
+	} else {
 		if (NodeGit) {
 			opts.implementation = 'nodegit';
-		} else {
+		} else if (gitBinary) {
 			opts.implementation = 'subprocess';
+		} else {
+			callback(new Error('No suitable implementation'));
 		}
 	}
 
