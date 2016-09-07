@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 1.1.2 - 2016-09-07
+
+### Fixed
+
+* Support Node 0.10 by not using `require('child_process').spawnSync`
+
 ## 1.1.1 - 2016-09-07
 
 ### Fixed
