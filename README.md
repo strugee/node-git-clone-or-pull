@@ -8,7 +8,9 @@ Ensure a git repo exists on disk and that it's up-to-date
 
 ## Usage
 
-_**WARNING:**_ this module makes a call to `nodegit`'s `Remote.url()` method which is _synchronous_!
+_**WARNING:**_ if you use the NodeGit implementation (default) this module will make a call to `nodegit`'s `Remote.url()` method which is _synchronous_!
+
+Simple example:
 
 ```js
 var cloneOrPull = require('git-clone-or-pull');
@@ -20,6 +22,34 @@ cloneOrPull('git://github.com/strugee/node-git-clone-or-pull.git', path.join(pro
     // Use repo
 });
 ```
+
+The `cloneOrPull()` function takes three arguments. In order:
+
+`url` (`String`) - the URL to clone from
+
+`opts` (`String` or `Object`) the pathname to clone to if a `String`, otherwise an object containing module options (see "Options" below)
+
+`callback` (`Function`) function callback that will be called upon completion of the clone or pull. If there is an error, it will be passed as the first argument.
+
+## Options
+
+`pathname` (`String`) - the pathname to clone to. If a `String` is provided instead of an options `Object`, it will be used as `pathname`'s value.
+
+`implementation` (`String`) - the implementation to use; defaults to `nodegit` in most cases (see "Implementations" below)
+
+## Implementations
+
+* `nodegit` uses NodeGit, the libgit2 bindings for Node. Note that this implementation will make a call to NodeGit's `Remote.url()` method which is _synchronous_!
+* `subprocess` is based on spawning `git` subprocesses (which means you need a `git` binary installed).
+
+Implementation is determined with the following algorithm:
+
+1. If `opts.implementation` exists its value will be used as the implementation; if that implementation is unavailable an error will be returned to the callback
+2. If NodeGit can be loaded, the implementation will be `nodegit`
+3. If `git --version` returns an exit code of 0, the implementation will be `subprocess`
+4. No implementation can be found and an error will be returned to the callback
+
+Each implementation has its negatives: `nodegit` make a synchronous call (albeit a minor one) and does not work on Node.js <= 0.10. `subprocess` does not make any such call, and works on all versions - but it requires an external binary.
 
 ## License
 
