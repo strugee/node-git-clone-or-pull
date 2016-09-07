@@ -14,11 +14,11 @@ _**WARNING:**_ this module makes a call to `nodegit`'s `Remote.url()` method whi
 var cloneOrPull = require('git-clone-or-pull');
 var path = require('path');
 
-cloneOrPull('git://github.com:strugee/node-git-clone-or-pull.git', path.join(process.cwd(), 'node-git-clone-or-pull'), function(err) {
+cloneOrPull('git://github.com/strugee/node-git-clone-or-pull.git', path.join(process.cwd(), 'node-git-clone-or-pull'), function(err) {
     if (err) throw err;
 
     // Use repo
-});;
+});
 ```
 
 ## License
