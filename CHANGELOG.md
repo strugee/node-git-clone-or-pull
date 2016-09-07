@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 1.1.1 - 2016-09-07
+
+### Fixed
+
+* _Actually_ mark NodeGit as optional in `package.json`
+
 ## 1.1.0 - 2016-09-06
 
 ### Added
