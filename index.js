@@ -20,8 +20,12 @@ var path = require('path');
 var childProcess = require('child_process');
 var concatStream = require('concat-stream');
 
-// This sync call is easier, and it's OK because it only happens once, at module init
-var gitBinary = childProcess.spawnSync('git', ['--version']).status === 0;
+var gitBinary = null;
+var gitBinaryProc = childProcess.spawn('git', ['--version']);
+gitBinaryProc.on('exit', function(code, signal) {
+	gitBinary = code === 0;
+});
+
 var NodeGit;
 
 try {
