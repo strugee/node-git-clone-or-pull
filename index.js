@@ -18,15 +18,15 @@
 var fs = require('fs');
 var NodeGit = require('nodegit');
 
-module.exports = function(url, path, callback) {
-	fs.access(path, function(err) {
+function withNodeGit(url, opts, callback) {
+	fs.access(opts.path, function(err) {
 		if (err) {
 			// Not yet cloned
-			NodeGit.Clone(url, path);
+			NodeGit.Clone(url, opts.path);
 		} else {
 			// Cloned already; we need to pull
 			var repo;
-			NodeGit.Repository.open(path).then(function(repository) {
+			NodeGit.Repository.open(opts.path).then(function(repository) {
 				repo = repository;
 				return repo.getRemote('origin');
 			}).then(function(remote) {
@@ -46,3 +46,21 @@ module.exports = function(url, path, callback) {
 		}
 	});
 };
+
+function gitCloneOrPull(url, opts, callback) {
+	if (typeof opts === 'string') opts = { path: opts };
+
+	if (!opts.implementation) {
+		opts.implementation = 'nodegit';
+	}
+
+	switch (opts.implementation) {
+	case 'nodegit':
+		withNodeGit(url, opts, callback);
+		break;
+	default:
+		callback(new Error('Implementation "' + opts.implementation + '" not recognized'));
+	}
+}
+
+module.exports = gitCloneOrPull;
