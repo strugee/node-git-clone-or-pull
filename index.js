@@ -16,6 +16,7 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 var spawn = require('child_process').spawn;
 var concatStream = require('concat-stream');
 var NodeGit;
@@ -62,9 +63,7 @@ function withNodeGit(url, opts, callback) {
 	});
 };
 
-function spawnWithSanityChecks(name, args, callback, exitCallback) {
-	var process = spawn(name, args);
-
+function spawnWithSanityChecks(name, args, targetCwd, userCallback, exitCallback) {
 	// Done here so it gets the right scope
 	function maybeFireCallback() {
 		// This function is called in any place where we might have completed a task that allows us to fire
@@ -83,6 +82,8 @@ function spawnWithSanityChecks(name, args, callback, exitCallback) {
 			userCallback(callbackErr);
 		}
 	}
+
+	var process = spawn(name, args, { cwd: targetCwd });
 
 	// We need all this to synchronize callbacks with when stuff is done buffering, execing, etc.
 	var callbackFired = false;
@@ -139,16 +140,12 @@ function spawnWithSanityChecks(name, args, callback, exitCallback) {
 
 function withGitSubprocess(url, opts, callback) {
 	fs.access(opts.path, function(err) {
-		try {
-			process.chdir(opts.path);
-		} catch (e) {
-			callback(e);
-			return;
-		}
+		// Chop off the last path element to get the proper cwd for git subprocesses
+		var targetDir = opts.path.split(path.sep).slice(0, -1);
 
 		if (err) {
 			// Not yet cloned
-			spawnWithSanityChecks('git', ['clone', '--quiet', url, opts.path], callback, function(stdout) {
+			spawnWithSanityChecks('git', ['clone', '--quiet', url, opts.path], targetDir, callback, function(stdout) {
 				callback();
 			});
 		} else {
@@ -156,17 +153,18 @@ function withGitSubprocess(url, opts, callback) {
 			// Cloned already; we need to pull
 
 			// Check remote url
-			spawnWithSanityChecks('git', ['remote', 'get-url', 'origin'], callback, function(remoteUrl) {
+			spawnWithSanityChecks('git', ['remote', 'get-url', 'origin'], targetDir, callback, function(remoteUrl) {
+				console.log(remoteUrl);
 				if (remoteUrl !== url) {
 					throw new Error('On-disk repository\'s origin remote does not have the specified URL set');
 				}
 
 				// Fetch
-				spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], callback, function(stdout) {
+				spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], targetDir, callback, function(stdout) {
 					// Checkout
-					spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], callback, function(stdout) {
+					spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], targetDir, callback, function(stdout) {
 						// Merge
-						spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], callback, function(stdout) {
+						spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], targetDir, callback, function(stdout) {
 							callback();
 						});
 					});
