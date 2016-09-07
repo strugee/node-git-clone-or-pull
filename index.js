@@ -103,6 +103,13 @@ function spawnWithSanityChecks(name, args, callback, exitCallback) {
 
 function withGitSubprocess(url, opts, callback) {
 	fs.access(opts.path, function(err) {
+		try {
+			process.chdir(opts.path);
+		} catch (e) {
+			callback(e);
+			return;
+		}
+
 		if (err) {
 			// Not yet cloned
 			spawnWithSanityChecks('git', ['clone', '--quiet', url, opts.path], callback, function(stdout) {
