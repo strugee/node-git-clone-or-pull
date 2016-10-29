@@ -8,8 +8,6 @@ Ensure a git repo exists on disk and that it's up-to-date
 
 ## Usage
 
-_**WARNING:**_ if you use the NodeGit implementation (default) this module will make a call to `nodegit`'s `Remote.url()` method which is _synchronous_!
-
 Simple example:
 
 ```js
@@ -39,7 +37,7 @@ The `cloneOrPull()` function takes three arguments. In order:
 
 ## Implementations
 
-* `nodegit` uses NodeGit, the libgit2 bindings for Node. Note that this implementation will make a call to NodeGit's `Remote.url()` method which is _synchronous_!
+* `nodegit` uses NodeGit, the libgit2 bindings for Node.
 * `subprocess` is based on spawning `git` subprocesses (which means you need a `git` binary installed).
 
 Implementation is determined with the following algorithm:
@@ -49,7 +47,7 @@ Implementation is determined with the following algorithm:
 3. If `git --version` returns an exit code of 0, the implementation will be `subprocess`
 4. No implementation can be found and an error will be returned to the callback
 
-Each implementation has its negatives: `nodegit` make a synchronous call (albeit a minor one) and does not work on Node.js <= 0.10. `subprocess` does not make any such call, and works on all versions - but it requires an external binary.
+Each implementation has its negatives: `nodegit` makes installation slightly more complicated. `subprocess` works on most systems - but it requires an external binary.
 
 ## License
 
