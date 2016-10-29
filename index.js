@@ -51,14 +51,7 @@ function withNodeGit(url, opts, callback) {
 			var repo;
 			NodeGit.Repository.open(opts.path).then(function(repository) {
 				repo = repository;
-				return repo.getRemote('origin');
-			}).then(function(remote) {
-				// Sync :/
-				if (remote.url() === url) {
-					return repo;
-				} else {
-					throw new Error('On-disk repository\'s origin remote does not have the specified URL set');
-				}
+				return repo;
 			}).then(function() {
 				return repo.fetchAll();
 			}).then(function() {
@@ -158,23 +151,13 @@ function withGitSubprocess(url, opts, callback) {
 		} else {
 			// Cloned already; we need to pull
 
-			// Check remote url
-			spawnWithSanityChecks('git', ['remote', 'get-url', 'origin'], opts.path, callback, function(remoteUrl) {
-				// Take out the trailing newline
-				remoteUrl = remoteUrl.slice(0, -1);
-
-				if (remoteUrl !== url) {
-					throw new Error('On-disk repository\'s origin remote does not have the specified URL set');
-				}
-
-				// Fetch
-				spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], opts.path, callback, function(stdout) {
-					// Checkout
-					spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], opts.path, callback, function(stdout) {
-						// Merge
-						spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], opts.path, callback, function(stdout) {
-							callback();
-						});
+			// Fetch
+			spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], opts.path, callback, function(stdout) {
+				// Checkout
+				spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], opts.path, callback, function(stdout) {
+					// Merge
+					spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], opts.path, callback, function(stdout) {
+						callback();
 					});
 				});
 			});

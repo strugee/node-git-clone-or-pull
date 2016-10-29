@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 2.0.0 - future
+
+### Breaking
+
+* Pulling no longer double-checks that the on-disk `origin` remote URL matches the provided URL
+
 ## 1.1.2 - 2016-09-07
 
 ### Fixed
