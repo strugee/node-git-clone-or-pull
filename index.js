@@ -20,11 +20,7 @@ var path = require('path');
 var childProcess = require('child_process');
 var concatStream = require('concat-stream');
 
-var gitBinary = null;
-var gitBinaryProc = childProcess.spawn('git', ['--version']);
-gitBinaryProc.on('exit', function(code, signal) {
-	gitBinary = code === 0;
-});
+var gitBinary = childProcess.spawnSync('git', ['--version']).status === 0;
 
 var NodeGit;
 
