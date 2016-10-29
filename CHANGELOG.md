@@ -6,6 +6,7 @@
 
 ### Breaking
 
+* Node 0.10 support has been dropped
 * Pulling no longer double-checks that the on-disk `origin` remote URL matches the provided URL
 
 ## 1.1.2 - 2016-09-07

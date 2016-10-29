@@ -6,6 +6,8 @@ Ensure a git repo exists on disk and that it's up-to-date
 
     npm install git-clone-or-pull
 
+Node 0.12 or greater is required.
+
 ## Usage
 
 Simple example:

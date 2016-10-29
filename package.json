@@ -30,5 +30,8 @@
   "devDependencies": {
     "lodash.assign": "^4.2.0",
     "vows": "^0.8.1"
+  },
+  "engine": {
+    "node": ">=0.12"
   }
 }
