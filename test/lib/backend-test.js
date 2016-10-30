@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert'),
     path = require('path'),
     fs = require('fs'),
