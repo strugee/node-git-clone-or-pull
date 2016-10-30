@@ -57,7 +57,7 @@ function withNodeGit(url, opts, callback) {
 			}).catch(callback);
 		}
 	});
-};
+}
 
 function withGitSubprocess(url, opts, callback) {
 	fs.access(opts.path, function(err) {
