@@ -14,6 +14,7 @@ module.exports = function(options) {
 	return {
 		'When we require the module': {
 			topic: function() {
+				/* jshint boss: true */
 				return cloneOrPull = require('../../index.js');
 			},
 			'it works': function(cloneOrPull) {

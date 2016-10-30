@@ -4,7 +4,8 @@
   "description": "Ensure a git repo exists on disk and that it's up-to-date",
   "main": "index.js",
   "scripts": {
-    "test": "vows -v test/*.js"
+    "test": "npm run lint && vows -v test/*.js",
+    "lint": "jshint index.js test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/strugee/node-git-clone-or-pull#readme",
   "dependencies": {
+    "jshint": "^2.9.4",
     "smart-spawn": "^1.0.0"
   },
   "optionalDependencies": {
