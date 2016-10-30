@@ -4,7 +4,7 @@ var assert = require('assert'),
     assign = require('lodash.assign'),
     smartSpawn = require('smart-spawn'),
     repoPath = path.join(process.cwd(), 'node-git-clone-or-pull'),
-    failRepoPath = path.join(process.cwd(), 'nonexistant');;
+    failRepoPath = path.join(process.cwd(), 'nonexistant');
 
 module.exports = function(options) {
 	var opts = assign({}, options, {path: repoPath}),
