@@ -36,12 +36,12 @@ function withNodeGit(url, opts, callback) {
 		if (err) {
 			// Not yet cloned
 			NodeGit.Clone(url, opts.path)
-				.catch(callback)
 				.then(function(repo) {
 					// We don't want to directly pass `callback` because then the consumer gets a copy
 					// of the repository object, which is public API
 					callback();
-				});
+				})
+				.catch(callback);
 		} else {
 			// Cloned already; we need to pull
 			var repo;
