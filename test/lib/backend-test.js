@@ -3,10 +3,12 @@ var assert = require('assert'),
     fs = require('fs'),
     assign = require('lodash.assign'),
     smartSpawn = require('smart-spawn'),
-    repoPath = path.join(process.cwd(), 'node-git-clone-or-pull');
+    repoPath = path.join(process.cwd(), 'node-git-clone-or-pull'),
+    failRepoPath = path.join(process.cwd(), 'nonexistant');;
 
 module.exports = function(options) {
-	var opts = assign(options, {path: repoPath}),
+	var opts = assign({}, options, {path: repoPath}),
+	    failOpts = assign({}, options, {path: failRepoPath}),
 	    cloneOrPull;
 
 	return {
@@ -56,6 +58,17 @@ module.exports = function(options) {
 							});
 						}
 					}
+				}
+			},
+			'and we try to clone or pull a nonexistant repository': {
+				topic: function(cloneOrPull) {
+					var callback = this.callback;
+					cloneOrPull('git://nonexistant.com/repo.git', failOpts, function(err) {
+						callback(null, err);
+});
+				},
+				'it fails': function(err) {
+					assert(err);
 				}
 			}
 		}
