@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 2.0.1 - 2016-10-29
+
+### Fixed
+
+* The NodeGit implementation now properly passes clone errors to the callback
+
 ## 2.0.0 - 2016-10-29
 
 ### Breaking
