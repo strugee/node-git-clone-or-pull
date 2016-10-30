@@ -18,7 +18,7 @@
 var fs = require('fs');
 var path = require('path');
 var childProcess = require('child_process');
-var concatStream = require('concat-stream');
+var spawnWithSanityChecks = require('smart-spawn');
 
 var gitBinary = childProcess.spawnSync('git', ['--version']).status === 0;
 
@@ -59,81 +59,6 @@ function withNodeGit(url, opts, callback) {
 	});
 };
 
-function spawnWithSanityChecks(name, args, targetCwd, userCallback, exitCallback) {
-	// Done here so it gets the right scope
-	function maybeFireCallback() {
-		// This function is called in any place where we might have completed a task that allows us to fire
-
-		if (callbackFired || callbackFiredErr) return;
-
-		// If everything is ready, we *should* fire the callback, and it hasn't already been fired, then do so
-		if (stdoutReady && stderrReady && wantCallback && !callbackFired) {
-			callbackFired = true;
-			exitCallback(stdout);
-		}
-
-		// Ditto for the callback with an error argument
-		if (stdoutReady && stderrReady && wantCallbackError && !callbackFiredErr) {
-			callbackFiredErr = true;
-			userCallback(callbackErr);
-		}
-	}
-
-	var process = childProcess.spawn(name, args, { cwd: targetCwd });
-
-	// We need all this to synchronize callbacks with when stuff is done buffering, execing, etc.
-	var callbackFired = false;
-	var callbackFiredErr = false;
-	var wantCallback = false;
-	var wantCallbackError = false;
-	var callbackErr;
-	var stdoutReady = false;
-	var stderrReady = false;
-
-	// Handle spawn errors
-	process.on('error', function(err) {
-		callbackErr = err;
-		wantCallbackError = true;
-
-		maybeFireCallback();
-	});
-
-	// Capture stderr in case we need it for an Error object
-	var stderr;
-	process.stderr.pipe(concatStream(function(buf) {
-		stderr = buf.toString();
-		stderrReady = true;
-
-		maybeFireCallback();
-	}));
-
-	// Capture stdout
-	var stdout;
-	process.stdout.pipe(concatStream(function(buf) {
-		stdout = buf.toString();
-		stdoutReady = true;
-
-		maybeFireCallback();
-	}));
-
-	process.on('exit', function(code, signal) {
-		// Handle non-zero exits
-		if (code !== 0) {
-			callbackErr = new Error('Process `' + name + ' ' + args.join(' ') + '` exited with non-zero exit code; stderr is:\n' + stderr);
-			wantCallbackError = true;
-
-			maybeFireCallback();
-
-			return;
-		}
-
-		wantCallback = true;
-		maybeFireCallback();
-	});
-
-	return process;
-}
-
 function withGitSubprocess(url, opts, callback) {
 	fs.access(opts.path, function(err) {
 		// Chop off the last path element to get the proper cwd for git subprocesses
@@ -141,18 +66,36 @@ function withGitSubprocess(url, opts, callback) {
 
 		if (err) {
 			// Not yet cloned
-			spawnWithSanityChecks('git', ['clone', '--quiet', url, opts.path], targetDir, callback, function(stdout) {
-				callback();
+			spawnWithSanityChecks('git', ['clone', '--quiet', url, opts.path], targetDir, function(err, stdout) {
+				// Pass undefined, not null
+				if (!err) err = undefined;
+
+				callback(err);
 			});
 		} else {
 			// Cloned already; we need to pull
 
 			// Fetch
-			spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], opts.path, callback, function(stdout) {
+			spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], opts.path, function(err, stdout) {
+				if (err) {
+					callback(err);
+					return;
+				}
+
 				// Checkout
-				spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], opts.path, callback, function(stdout) {
+				spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], opts.path, function(err, stdout) {
+					if (err) {
+						callback(err);
+						return;
+					}
+
 					// Merge
-					spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], opts.path, callback, function(stdout) {
+					spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], opts.path, function(err, stdout) {
+						if (err) {
+							callback(err);
+							return;
+						}
+
 						callback();
 					});
 				});
