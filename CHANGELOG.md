@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 2.1.0 - 2016-11-09
+
+### Changed
+
+* Upgrade to smart-spawn@2
+
 ## 2.0.1 - 2016-10-29
 
 ### Fixed

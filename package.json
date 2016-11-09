@@ -24,7 +24,7 @@
   "homepage": "https://github.com/strugee/node-git-clone-or-pull#readme",
   "dependencies": {
     "jshint": "^2.9.4",
-    "smart-spawn": "^1.0.0"
+    "smart-spawn": "^2.0.0"
   },
   "optionalDependencies": {
     "nodegit": "^0.14.1"
