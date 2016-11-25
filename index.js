@@ -15,10 +15,10 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var childProcess = require('child_process');
-var spawnWithSanityChecks = require('smart-spawn');
+var fs = require('fs'),
+    path = require('path'),
+    childProcess = require('child_process'),
+    spawnWithSanityChecks = require('smart-spawn');
 
 var gitBinary = childProcess.spawnSync('git', ['--version']).status === 0;
 
