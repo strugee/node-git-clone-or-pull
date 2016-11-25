@@ -51,7 +51,7 @@ function withNodeGit(url, opts, callback) {
 			}).then(function() {
 				return repo.fetchAll();
 			}).then(function() {
-				return repo.mergeBranches('master', 'origin/master');
+				return repo.mergeBranches(opts.branch, 'origin/' + opts.branch);
 			}).then(function() {
 				callback();
 			}).catch(callback);
@@ -66,7 +66,7 @@ function withGitSubprocess(url, opts, callback) {
 
 		if (err) {
 			// Not yet cloned
-			spawnWithSanityChecks('git', ['clone', '--quiet', url, opts.path], targetDir, function(err, stdout) {
+			spawnWithSanityChecks('git', ['clone', '--quiet', '--branch', opts.branch, url, opts.path], targetDir, function(err, stdout) {
 				// Pass undefined, not null
 				if (!err) err = undefined;
 
@@ -76,21 +76,21 @@ function withGitSubprocess(url, opts, callback) {
 			// Cloned already; we need to pull
 
 			// Fetch
-			spawnWithSanityChecks('git', ['fetch','--quiet', '--all'], opts.path, function(err, stdout) {
+			spawnWithSanityChecks('git', ['fetch', '--quiet', '--all'], opts.path, function(err, stdout) {
 				if (err) {
 					callback(err);
 					return;
 				}
 
 				// Checkout
-				spawnWithSanityChecks('git', ['checkout','--quiet', 'master'], opts.path, function(err, stdout) {
+				spawnWithSanityChecks('git', ['checkout','--quiet', opts.branch], opts.path, function(err, stdout) {
 					if (err) {
 						callback(err);
 						return;
 					}
 
 					// Merge
-					spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/master'], opts.path, function(err, stdout) {
+					spawnWithSanityChecks('git', ['merge','--quiet', '--ff-only', 'origin/' + opts.branch], opts.path, function(err, stdout) {
 						if (err) {
 							callback(err);
 							return;
@@ -106,6 +106,7 @@ function withGitSubprocess(url, opts, callback) {
 
 function gitCloneOrPull(url, opts, callback) {
 	if (typeof opts === 'string') opts = { path: opts };
+	if (!opts.branch) opts.branch = 'master';
 
 	// If a specific implementation has been requested, abort if it's unavailable
 	// Otherwise, choose a sensible default.
