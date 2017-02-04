@@ -1,5 +1,7 @@
 # `git-clone-or-pull`
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/strugee/node-git-clone-or-pull.svg)](https://greenkeeper.io/)
+
 Ensure a git repo exists on disk and that it's up-to-date
 
 ## Installation
