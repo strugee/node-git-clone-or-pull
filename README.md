@@ -1,5 +1,7 @@
 # `git-clone-or-pull`
 
+[![Build Status](https://travis-ci.org/strugee/node-git-clone-or-pull.svg?branch=master)](http://travis-ci.org/strugee/node-git-clone-or-pull)
+[![npm](https://img.shields.io/npm/v/git-clone-or-pull.svg)](https://npmjs.com/package/git-clone-or-pull)
 [![Greenkeeper badge](https://badges.greenkeeper.io/strugee/node-git-clone-or-pull.svg)](https://greenkeeper.io/)
 
 Ensure a git repo exists on disk and that it's up-to-date
