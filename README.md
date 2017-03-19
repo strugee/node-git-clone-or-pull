@@ -37,7 +37,7 @@ The `cloneOrPull()` function takes three arguments. In order:
 
 ## Options
 
-`path` (`String`) - the pathname to clone to. If a `String` is provided instead of an options `Object`, it will be used as `pathname`'s value.
+`path` (`String`) - the pathname to clone to. If a `String` is provided instead of an options `Object`, it will be used as `path`'s value.
 
 `implementation` (`String`) - the implementation to use; defaults to `nodegit` in most cases (see "Implementations" below)
 
