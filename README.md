@@ -6,6 +6,9 @@
 
 Ensure a git repo exists on disk and that it's up-to-date
 
+
+[![Coverage Status](https://coveralls.io/repos/github/strugee/node-git-clone-or-pull/badge.svg?branch=master)](https://coveralls.io/github/strugee/node-git-clone-or-pull?branch=master)
+
 ## Installation
 
     npm install git-clone-or-pull
