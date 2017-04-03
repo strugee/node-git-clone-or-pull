@@ -5,6 +5,7 @@ var assert = require('assert'),
     fs = require('fs'),
     assign = require('lodash.assign'),
     smartSpawn = require('smart-spawn'),
+    rimraf = require('rimraf'),
     repoPath = path.join(process.cwd(), 'strugee.github.com');
 
 module.exports = function(options) {
@@ -15,6 +16,9 @@ module.exports = function(options) {
 			topic: function() {
 				/* jshint boss: true */
 				return cloneOrPull = require('../../index.js');
+			},
+			teardown: function() {
+				rimraf(repoPath, this.callback);
 			},
 			'it works': function(cloneOrPull) {
 				assert.isFunction(cloneOrPull);
