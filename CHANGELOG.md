@@ -2,7 +2,7 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
-## 2.2.0 - Future
+## 2.2.0 - 2017-04-03
 
 ### Improved
 
