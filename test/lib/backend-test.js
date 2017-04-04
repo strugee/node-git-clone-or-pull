@@ -13,7 +13,7 @@ module.exports = function(options) {
     var opts = assign({}, options, {path: repoPath}),
         failOpts = assign({}, options, {path: failRepoPath});
 
-    describe('git-clone-or-pull', function() {
+    describe('git-clone-or-pull - ' + options.implementation, function() {
         var cloneOrPull;
 
         before(function() {
