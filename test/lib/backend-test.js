@@ -13,7 +13,7 @@ module.exports = function(options) {
     var opts = assign({}, options, {path: repoPath}),
         failOpts = assign({}, options, {path: failRepoPath});
 
-    describe('Backend test', function() {
+    describe('git-clone-or-pull', function() {
         var cloneOrPull;
 
         before(function() {
@@ -23,7 +23,6 @@ module.exports = function(options) {
         it('should be required correctly', function() {
             assert.isFunction(cloneOrPull);
         });
-
 
         context('clone something for the first time', function() {
             before(function(done) {
@@ -79,8 +78,30 @@ module.exports = function(options) {
                             assert.ifError(err);
                         });
                     });
-                })
-            })
+                });
+            });
+        });
+        context('clone a repo and specify the branch', function() {
+            before(function(done) {
+                cloneOrPull('git://github.com/strugee/strugee.github.com.git', assign({}, options, {branch: 'src', path: repoPath}), done);
+            });
+
+            after(function(done) {
+                rimraf(repoPath, done);
+            });
+
+            it('the directory exists', function(done) {
+                fs.access(repoPath, function(err) {
+                    assert.ifError(err);
+                    done();
+                });
+            });
+            it('src/ directory should exist', function(done) {
+                fs.access(path.join(repoPath, 'src'), function(err) {
+                    assert.ifError(err);
+                    done();
+                });
+            });
         });
         context('clone or pull a nonexistant repository', function() {
             after(function(done) {
@@ -88,7 +109,7 @@ module.exports = function(options) {
             });
 
             it('should fail', function(done) {
-                cloneOrPull(`git://nonexistant.com/repo.git`, failOpts, function(err) {
+                cloneOrPull('git://nonexistant.com/repo.git', failOpts, function(err) {
                     assert.isDefined(err);
                     done();
                 });
