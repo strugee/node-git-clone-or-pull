@@ -4,7 +4,7 @@
   "description": "Ensure a git repo exists on disk and that it's up-to-date",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint && vows -v test/*.js",
+    "test": "npm run lint && mocha test/*.js",
     "lint": "jshint index.js test/**/*.js"
   },
   "repository": {
@@ -30,9 +30,10 @@
     "nodegit": "^0.16.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "lodash.assign": "^4.2.0",
-    "rimraf": "^2.6.1",
-    "vows": "^0.8.1"
+    "mocha": "^3.2.0",
+    "rimraf": "^2.6.1"
   },
   "engine": {
     "node": ">=0.12"

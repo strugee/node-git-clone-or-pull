@@ -1,10 +1,11 @@
 'use strict';
 
-var vows = require('vows'),
+var mocha = require('mocha'),
     backendTest = require('./lib/backend-test.js');
 
-var suite = vows.describe('NodeGit backend');
-
-suite.addBatch(backendTest({implementation: 'nodegit'}));
-
-suite['export'](module);
+var suite = mocha.Suite(
+    'NodeGit backend', 
+    backendTest(
+        {implementation: 'nodegit'}
+    )
+);

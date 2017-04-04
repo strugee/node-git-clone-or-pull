@@ -1,10 +1,11 @@
 'use strict';
 
-var vows = require('vows'),
+var mocha = require('mocha'),
     backendTest = require('./lib/backend-test.js');
 
-var suite = vows.describe('Subprocess backend');
-
-suite.addBatch(backendTest({implementation: 'subprocess'}));
-
-suite['export'](module);
+var suite = mocha.Suite(
+    'Subprocess backend', 
+    backendTest(
+        {implementation: 'subprocess'}
+    )
+);
