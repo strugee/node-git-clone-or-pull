@@ -1,6 +1,6 @@
 'use strict';
 
-var vows = require('vows'),
+var vows = require('perjury'),
     backendTest = require('./lib/backend-test.js');
 
 var suite = vows.describe('Subprocess backend');

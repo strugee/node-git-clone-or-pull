@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert'),
+var assert = require('perjury').assert,
     path = require('path'),
     fs = require('fs'),
     assign = require('lodash.assign'),
@@ -20,7 +20,8 @@ module.exports = function(options) {
 			teardown: function() {
 				rimraf(repoPath, this.callback);
 			},
-			'it works': function(cloneOrPull) {
+			'it works': function(err, cloneOrPull) {
+				assert.ifError(err);
 				assert.isFunction(cloneOrPull);
 			},
 			'and we clone something and specify the branch': {
