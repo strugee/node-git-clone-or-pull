@@ -10,7 +10,7 @@ Ensure a git repo exists on disk and that it's up-to-date
 
     npm install git-clone-or-pull
 
-Node 0.12 or greater is required.
+Node 4.x or greater is required. The module will probably work on Node 0.12, but the tests do not. So I wouldn't count on it.
 
 ## Usage
 
