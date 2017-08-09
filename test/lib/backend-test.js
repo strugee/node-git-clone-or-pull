@@ -32,13 +32,15 @@ module.exports = function(options) {
 					cloneOrPull('git://github.com/strugee/node-git-clone-or-pull.git', opts, this.callback);
 				},
 				'the directory exists': function() {
-					fs.access(repoPath, function(err) {
-						assert.ifError(err);
+					// Evil sync thing
+					assert.doesNotThrow(function() {
+						fs.accessSync(repoPath);
 					});
 				},
 				'the test/ directory exists': function() {
-					fs.access(path.join(repoPath, 'test'), function(err) {
-						assert.ifError(err);
+					// Evil sync thing
+					assert.doesNotThrow(function() {
+						fs.accessSync(path.join(repoPath, 'test'));
 					});
 				},
 				'and we reset to the initial commit': {
@@ -49,8 +51,9 @@ module.exports = function(options) {
 						assert.equal(stdout, 'HEAD is now at 47e0a18 Initial commit\n');
 					},
 					'the test/ directory does not exist': function() {
-						fs.access(path.join(repoPath, 'test'), function(err) {
-							assert.ok(err);
+						// Evil sync thing
+						assert.throws(function() {
+							fs.accessSync(path.join(repoPath, 'test'));
 						});
 					},
 					'and then we clone or pull again': {
@@ -61,8 +64,9 @@ module.exports = function(options) {
 							assert.ifError(err);
 						},
 						'the test/ directory exists again': function() {
-							fs.access(repoPath, function(err, stat) {
-								assert.ifError(err);
+							// Evil sync thing
+							assert.doesNotThrow(function() {
+								fs.accessSync(repoPath);
 							});
 						}
 					}
