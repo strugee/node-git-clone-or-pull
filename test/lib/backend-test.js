@@ -84,6 +84,7 @@ module.exports = function(options) {
 				},
 				'it fails': function(err, expectedError) {
 					assert.ifError(err);
+					// TODO assert this is the right kind of error
 					assert.isObject(expectedError);
 				}
 			}
