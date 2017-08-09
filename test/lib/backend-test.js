@@ -50,7 +50,7 @@ module.exports = function(options) {
 					},
 					'the test/ directory does not exist': function() {
 						fs.access(path.join(repoPath, 'test'), function(err) {
-							assert(err);
+							assert.ok(err);
 						});
 					},
 					'and then we clone or pull again': {
@@ -76,7 +76,7 @@ module.exports = function(options) {
 });
 				},
 				'it fails': function(err) {
-					assert(err);
+					assert.ok(err);
 				}
 			}
 		}
