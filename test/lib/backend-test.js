@@ -73,10 +73,11 @@ module.exports = function(options) {
 					var callback = this.callback;
 					cloneOrPull('git://nonexistant.com/repo.git', failOpts, function(err) {
 						callback(null, err);
-});
+					});
 				},
-				'it fails': function(err) {
-					assert.isObject(err);
+				'it fails': function(err, expectedError) {
+					assert.ifError(err);
+					assert.isObject(expectedError);
 				}
 			}
 		}
