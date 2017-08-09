@@ -76,7 +76,7 @@ module.exports = function(options) {
 });
 				},
 				'it fails': function(err) {
-					assert.ok(err);
+					assert.isObject(err);
 				}
 			}
 		}
