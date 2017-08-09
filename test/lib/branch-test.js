@@ -29,13 +29,17 @@ module.exports = function(options) {
 					cloneOrPull('git://github.com/strugee/strugee.github.com.git', assign({}, options, {branch: 'src', path: repoPath}), this.callback);
 				},
 				'the directory exists': function() {
-					fs.access(repoPath, function(err) {
-						assert.ifError(err);
+					fs.accessSync(repoPath, function(err) {
+						// Evil sync thing
+						assert.doesNotThrow(function() {
+							fs.accessSync(repoPath);
+						});
 					});
 				},
 				'the src/ directory exists': function() {
-					fs.access(path.join(repoPath, 'src'), function(err) {
-						assert.ifError(err);
+					// Evil sync thing
+					assert.doesNotThrow(function() {
+						fs.accessSync(path.join(repoPath, 'src'));
 					});
 				}
 			}
