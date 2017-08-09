@@ -31,6 +31,9 @@ module.exports = function(options) {
 				topic: function(cloneOrPull) {
 					cloneOrPull('git://github.com/strugee/node-git-clone-or-pull.git', opts, this.callback);
 				},
+				'it works': function(err) {
+					assert.ifError(err);
+				},
 				'the directory exists': function() {
 					// Evil sync thing
 					assert.doesNotThrow(function() {

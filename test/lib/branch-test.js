@@ -28,6 +28,9 @@ module.exports = function(options) {
 				topic: function(cloneOrPull) {
 					cloneOrPull('git://github.com/strugee/strugee.github.com.git', assign({}, options, {branch: 'src', path: repoPath}), this.callback);
 				},
+				'it works': function(err) {
+					assert.ifError(err);
+				},
 				'the directory exists': function() {
 					// Evil sync thing
 					assert.doesNotThrow(function() {
