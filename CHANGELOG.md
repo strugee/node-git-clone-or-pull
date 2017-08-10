@@ -2,6 +2,17 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 3.0.0 - 2017-08-10
+
+### Improved
+
+* Upgrade to NodeGit@0.19, fixing some failures with Node 7
+
+### Breaking
+
+* Drop support for Node 5 due to NodeGit doing the same
+* Stop pretending we support Node 8 when NodeGit upstream doesn't support Node 8
+
 ## 2.2.0 - 2017-04-03
 
 ### Improved
