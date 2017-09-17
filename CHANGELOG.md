@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 3.1.0 - 2017-09-17
+
+### Improved
+
+* Upgrade to NodeGit@0.20
+
 ## 3.0.0 - 2017-08-10
 
 ### Improved
