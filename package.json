@@ -4,7 +4,7 @@
   "description": "Ensure a git repo exists on disk and that it's up-to-date",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint && perjury -v test/*.js",
+    "test": "npm run lint && nyc -r lcov perjury -v test/*.js",
     "lint": "jshint index.js test/**/*.js"
   },
   "repository": {
@@ -30,7 +30,9 @@
     "nodegit": "^0.20.2"
   },
   "devDependencies": {
+    "coveralls": "^2.13.1",
     "lodash.assign": "^4.2.0",
+    "nyc": "^11.2.1",
     "perjury": "^0.4.3",
     "rimraf": "^2.6.1"
   },
