@@ -1,6 +1,7 @@
 # `git-clone-or-pull`
 
 [![Build Status](https://travis-ci.org/strugee/node-git-clone-or-pull.svg?branch=master)](http://travis-ci.org/strugee/node-git-clone-or-pull)
+[![Coverage Status](https://coveralls.io/repos/github/strugee/node-git-clone-or-pull/badge.svg?branch=master)](https://coveralls.io/github/strugee/node-git-clone-or-pull?branch=master)
 [![npm](https://img.shields.io/npm/v/git-clone-or-pull.svg)](https://npmjs.com/package/git-clone-or-pull)
 [![Greenkeeper badge](https://badges.greenkeeper.io/strugee/node-git-clone-or-pull.svg)](https://greenkeeper.io/)
 
