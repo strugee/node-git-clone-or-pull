@@ -31,6 +31,9 @@ module.exports = function(options) {
 				'it works': function(err) {
 					assert.ifError(err);
 				},
+				'we get passed `undefined`': function(err, ret) {
+					assert.isUndefined(ret);
+				},
 				'the directory exists': function() {
 					// Evil sync thing
 					assert.doesNotThrow(function() {
