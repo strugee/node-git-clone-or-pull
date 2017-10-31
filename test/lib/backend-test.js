@@ -5,9 +5,9 @@ var assert = require('perjury').assert,
     fs = require('fs'),
     assign = require('lodash.assign'),
     smartSpawn = require('smart-spawn'),
-    rimraf = require('rimraf'),
-    repoPath = path.join(process.cwd(), 'node-git-clone-or-pull'),
-    failRepoPath = path.join(process.cwd(), 'nonexistant');
+    tmpdir = require('./tmpdir'),
+    repoPath = path.join(tmpdir, 'repo'),
+    failRepoPath = path.join(tmpdir, 'nonexistant');
 
 module.exports = function(options) {
 	var opts = assign({}, options, {path: repoPath}),
@@ -19,9 +19,6 @@ module.exports = function(options) {
 			topic: function() {
 				/* jshint boss: true */
 				return cloneOrPull = require('../../index.js');
-			},
-			teardown: function() {
-				rimraf(repoPath, this.callback);
 			},
 			'it works': function(err, cloneOrPull) {
 				assert.ifError(err);

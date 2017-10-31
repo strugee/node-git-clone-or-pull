@@ -34,7 +34,7 @@
     "lodash.assign": "^4.2.0",
     "nyc": "^11.2.1",
     "perjury": "^1.0.1",
-    "rimraf": "^2.6.1"
+    "tmp": "0.0.33"
   },
   "engine": {
     "node": ">=4.0"
