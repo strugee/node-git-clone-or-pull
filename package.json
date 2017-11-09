@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/strugee/node-git-clone-or-pull#readme",
   "dependencies": {
-    "jshint": "^2.9.4",
     "smart-spawn": "^2.0.0"
   },
   "optionalDependencies": {
@@ -31,6 +30,7 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
+    "jshint": "^2.9.4",
     "lodash.assign": "^4.2.0",
     "nyc": "^11.2.1",
     "perjury": "^1.0.1",
