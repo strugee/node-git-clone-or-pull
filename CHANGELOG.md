@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 3.1.1 - 2017-11-15
+
+### Fixed
+
+* JSHint is now marked as a development dependency, not a producction dependency (#22)
+
 ## 3.1.0 - 2017-09-17
 
 ### Improved
