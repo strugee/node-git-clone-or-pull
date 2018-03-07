@@ -26,7 +26,7 @@
     "smart-spawn": "^2.0.0"
   },
   "optionalDependencies": {
-    "nodegit": "^0.20.2"
+    "nodegit": "^0.21.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
