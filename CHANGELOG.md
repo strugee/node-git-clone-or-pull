@@ -6,7 +6,7 @@
 
 ### Fixed
 
-* JSHint is now marked as a development dependency, not a producction dependency (#22)
+* JSHint is now marked as a development dependency, not a production dependency (#22)
 
 ## 3.1.0 - 2017-09-17
 
