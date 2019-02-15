@@ -2,6 +2,12 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
+## 4.0.0 - future
+
+### Breaking
+
+* Drop Node 4
+
 ## 3.1.1 - 2017-11-15
 
 ### Fixed
