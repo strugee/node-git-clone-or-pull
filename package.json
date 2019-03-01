@@ -30,10 +30,10 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "jshint": "^2.9.4",
+    "jshint": "^2.10.1",
     "lodash.assign": "^4.2.0",
     "nyc": "^13.3.0",
-    "perjury": "^1.0.1",
+    "perjury": "^1.1.4",
     "tmp": "0.0.33"
   },
   "engine": {
