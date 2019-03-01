@@ -4,9 +4,13 @@
 
 ## 4.0.0 - future
 
+### Added
+
+* Support Node 10
+
 ### Breaking
 
-* Drop Node 4
+* Drop Node 4 and Node 7
 
 ### Security
 
