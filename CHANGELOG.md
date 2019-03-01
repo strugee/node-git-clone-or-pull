@@ -8,6 +8,10 @@
 
 * Drop Node 4
 
+### Security
+
+* Pull in a newer NodeGit to [fix](https://github.com/nodegit/nodegit/blob/master/CHANGELOG.md#v0222-2018-07-10) (pretty old) security vulnerabilities
+
 ## 3.1.1 - 2017-11-15
 
 ### Fixed
