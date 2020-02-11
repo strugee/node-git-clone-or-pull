@@ -2,19 +2,19 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
-## 4.0.0 - future
+## 4.0.0 - 
 
 ### Added
 
-* Support Node 10
+* Support Node 10 and Node 12
 
 ### Breaking
 
-* Drop Node 4 and Node 7
+* Drop Node 4, Node 6, and Node 7
 
 ### Security
 
-* Pull in a newer NodeGit to [fix](https://github.com/nodegit/nodegit/blob/master/CHANGELOG.md#v0222-2018-07-10) (pretty old) security vulnerabilities
+* Pull in a newer NodeGit to [fix](https://github.com/nodegit/nodegit/blob/master/CHANGELOG.md#v0222-2018-07-10) [some](https://github.com/nodegit/nodegit/blob/master/CHANGELOG.md#v0263-2019-12-10) (pretty old) security vulnerabilities
 
 ## 3.1.1 - 2017-11-15
 
