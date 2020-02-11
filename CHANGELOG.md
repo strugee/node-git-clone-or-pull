@@ -2,7 +2,7 @@
 
 `git-clone-or-pull` follows [Semantic Versioning][1].
 
-## 4.0.0 - 
+## 4.0.0 - 2020-02-10
 
 ### Added
 
